@@ -15,6 +15,11 @@ export default withTRPC<AppRouter>({
     return {
       url,
       transformer: superjson,
+      queryClientConfig: {
+        defaultOptions: {
+          queries: { suspense: true },
+        },
+      },
     };
   },
 })(MyApp);
