@@ -1,9 +1,10 @@
 import { trpc } from "@/utils/trpc";
 
 export default function IndexPage() {
-  const { data, isLoading } = trpc.useQuery(["hello", { text: "client" }]);
+  const helloQuery = trpc.useQuery(["hello", { text: "mojahige" }]);
+  const userQuery = trpc.useQuery(["user.get", { id: "hogehoge" }]);
 
-  if (isLoading) {
+  if (helloQuery.isLoading || userQuery.isLoading) {
     return (
       <div>
         <p>Loading...</p>
@@ -11,9 +12,14 @@ export default function IndexPage() {
     );
   }
 
-  return data ? (
+  return (
     <div>
-      <p>{data.greeting}</p>
+      {helloQuery.data?.greeting && <p>{helloQuery.data.greeting}</p>}
+      {userQuery.data && (
+        <p>
+          {userQuery.data.id}: {userQuery.data.name}
+        </p>
+      )}
     </div>
-  ) : null;
+  );
 }
