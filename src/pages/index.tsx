@@ -1,16 +1,10 @@
 import { trpc } from "@/utils/trpc";
+import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
-export default function IndexPage() {
-  const helloQuery = trpc.useQuery(["hello", { text: "mojahige" }]);
-  const userQuery = trpc.useQuery(["user.get", { id: "hogehoge" }]);
-
-  if (helloQuery.isLoading || userQuery.isLoading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+function Foo() {
+  const helloQuery = trpc.useQuery(["hello", { text: "foo" }]);
+  const userQuery = trpc.useQuery(["user.get", { id: "bar" }]);
 
   return (
     <div>
@@ -21,5 +15,15 @@ export default function IndexPage() {
         </p>
       )}
     </div>
+  );
+}
+
+export default function IndexPage() {
+  return (
+    <ErrorBoundary FallbackComponent={() => <p>Error</p>}>
+      <React.Suspense fallback={<p>Loading...</p>}>
+        <Foo />
+      </React.Suspense>
+    </ErrorBoundary>
   );
 }
